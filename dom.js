@@ -1,3 +1,5 @@
+const bookKey = "BOOK_ID";
+
 function showformaddbuku() {
     document.getElementById('formbuku').classList.add('tampil')
 }
@@ -7,16 +9,17 @@ function closeformaddbuku() {
 }
 
 function insertToLocalStorage(a ,b ,c ,d) {
-    const newUserData = {
+    const bukuData = {
         id: +new Date(),
         title: a,
         author: b,
         year: c,
         isComplete: d,
     }
+    localStorage.setItem(bukuData.id, JSON.stringify(bukuData))
 }
 
-function simpanBuku(dimana) {
+function simpanBuku(dimana, a, b, c, d) {
     const incompleteBookshelfListElement = document.getElementById(dimana)
     
     const textContainerElement = document.createElement("article");
@@ -27,12 +30,10 @@ function simpanBuku(dimana) {
     const buttons = "<button class='green'>Selesai dibaca</button><button class='red'>Hapus buku</button>"
     bookOperationElement.innerHTML = buttons
 
-    textContainerElement.append(judulBukuTextElement, authorTextElement, bookOperationElement);
+    textContainerElement.append(a,b,c, bookOperationElement);
     incompleteBookshelfListElement.append(textContainerElement)
     
-    
-
-    insertToLocalStorage(judulBukuText,authorText,yearText, selesaiDibaca)
+    insertToLocalStorage(a,b,c,d)
     
  
     return textContainerElement;
@@ -52,10 +53,10 @@ function masukanBuku() {
     yearTextElement.innerText = 'Tahun: ' + yearText
 
     const selesaiDibacaStatus = document.getElementById('inputBookIsComplete').checked
-    if(selesaiDibacaStatus === true) {
-        simpanBuku('incompleteBookshelfList')
+    if(selesaiDibacaStatus === false) {
+        simpanBuku('incompleteBookshelfList',judulBukuTextElement,authorTextElement,yearTextElement,selesaiDibacaStatus)
     } else {
-        simpanBuku('completeBookshelfList')
+        simpanBuku('completeBookshelfList',judulBukuText,authorText,yearText,selesaiDibacaStatus)
     }
-    insertToLocalStorage()
+    insertToLocalStorage(judulBukuText,authorText,yearText,selesaiDibacaStatus)
 }
