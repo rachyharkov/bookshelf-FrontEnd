@@ -1,4 +1,6 @@
-const bookKey = "BOOK_ID";
+const BELUM_DIBACA = "incompleteBookshelfList";
+const SUDAH_DIBACA = "completeBookshelfList";
+const BUKU_ITEMID = "itemId";
 
 function showformaddbuku() {
     document.getElementById('formbuku').classList.add('tampil')
@@ -8,34 +10,19 @@ function closeformaddbuku() {
     document.getElementById('formbuku').classList.remove('tampil')
 }
 
-function insertToLocalStorage(a ,b ,c ,d) {
-    const bukuData = {
-        id: +new Date(),
-        title: a,
-        author: b,
-        year: c,
-        isComplete: d,
-    }
-    localStorage.setItem(bukuData.id, JSON.stringify(bukuData))
-}
-
 function simpanBuku(dimana, a, b, c, d) {
-    const incompleteBookshelfListElement = document.getElementById(dimana)
+    const rakBuku = document.getElementById(dimana)
     
     const textContainerElement = document.createElement("article");
     textContainerElement.classList.add('book_item')
     
     const bookOperationElement = document.createElement("div");
     bookOperationElement.classList.add('action')
-    const buttons = "<button class='green'>Selesai dibaca</button><button class='red'>Hapus buku</button>"
-    bookOperationElement.innerHTML = buttons
+    bookOperationElement.append(buatTombolGantiStatusBuku(),buatTombolBuangBuku())
 
     textContainerElement.append(a,b,c, bookOperationElement);
-    incompleteBookshelfListElement.append(textContainerElement)
+    rakBuku.append(textContainerElement)
     
-    insertToLocalStorage(a,b,c,d)
-    
- 
     return textContainerElement;
 }
 
@@ -54,9 +41,53 @@ function masukanBuku() {
 
     const selesaiDibacaStatus = document.getElementById('inputBookIsComplete').checked
     if(selesaiDibacaStatus === false) {
-        simpanBuku('incompleteBookshelfList',judulBukuTextElement,authorTextElement,yearTextElement,selesaiDibacaStatus)
+        const book = simpanBuku(BELUM_DIBACA,judulBukuTextElement,authorTextElement,yearTextElement,selesaiDibacaStatus)
     } else {
-        simpanBuku('completeBookshelfList',judulBukuText,authorText,yearText,selesaiDibacaStatus)
+        const book = simpanBuku(SUDAH_DIBACA,judulBukuText,authorText,yearText,selesaiDibacaStatus)
     }
-    insertToLocalStorage(judulBukuText,authorText,yearText,selesaiDibacaStatus)
+
+    const bookObject = composeBooksObject(judulBukuText,authorText,yearText,selesaiDibacaStatus);
+    books.push(bookObject);
+    updateDataToStorage();
+}
+
+function buatTombolBuangBuku() {
+    return createButton("red", "Sudah Dibaca", function (event) {
+        removeTaskFromCompleted(event.target.parentElement);
+    });
+}
+
+function buatTombolGantiStatusBuku() {
+    return createButton("green", "Belum Dibaca", function (event) {
+        sudahDibaca(event.target.parentElement);
+    });
+}
+
+function createButton(buttonTypeClass, text , eventListener) {
+    const button = document.createElement("button");
+    button.classList.add(buttonTypeClass);
+    button.innerHTML = text
+    button.addEventListener("click", function (event) {
+        eventListener(event);
+        event.stopPropagation();
+    });
+    return button;
+}
+
+function sudahDibaca(bookElement) {
+    const listSudahDibaca = document.getElementById(SUDAH_DIBACA);
+    const judulBuku = bookElement.querySelector(".inner > h2").innerText;
+    const authorBuku = bookElement.querySelector(".inner > p:nth-child(2)").innerText;
+    const yearBuku = bookElement.querySelector(".inner > p:nth-child(3)").innerText;
+
+    const newBook = simpanBuku(listSudahDibaca,judulBuku, authorBuku, yearBuku, true);
+     
+    const book = findbook(bookElement[BUKU_ITEMID]);
+    book.isComplete = true;
+    newBook[BUKU_ITEMID] = book.id;
+
+    listSudahDibaca.append(newBook);
+    bookElement.remove();
+
+    updateDataToStorage();
 }
