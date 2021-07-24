@@ -1,6 +1,6 @@
 const BELUM_DIBACA = "incompleteBookshelfList";
 const SUDAH_DIBACA = "completeBookshelfList";
-const BUKU_ITEMID = "itemId";
+const BUKU_ITEMID = "id";
 
 function showformaddbuku() {
     document.getElementById('formbuku').classList.add('tampil')
@@ -18,49 +18,58 @@ function simpanBuku(dimana, a, b, c, d) {
     
     const bookOperationElement = document.createElement("div");
     bookOperationElement.classList.add('action')
-    bookOperationElement.append(buatTombolGantiStatusBuku(),buatTombolBuangBuku())
+    bookOperationElement.append(buatTombolGantiStatusBuku(dimana),buatTombolBuangBuku())
 
     textContainerElement.append(a,b,c, bookOperationElement);
     rakBuku.append(textContainerElement)
-    
-    return textContainerElement;
+
+    const bookObject = composeBooksObject(a.innerText,b.innerText,c.innerText,d.innerText);
+    textContainerElement[BUKU_ITEMID] = bookObject.id;
+    //console.log(textContainerElement[BUKU_ITEMID])
+    updateDataToStorage();
+
+    return textContainerElement
 }
 
 function masukanBuku() {
     const judulBukuTextElement = document.createElement("h3");
     const judulBukuText = document.getElementById('inputBookTitle').value   
-    judulBukuTextElement.innerText = judulBukuText;
+    judulBukuTextElement.innerHTML = judulBukuText;
  
     const authorTextElement = document.createElement("p");
     const authorText = document.getElementById('inputBookAuthor').value
-    authorTextElement.innerText = 'Penulis: ' + authorText
+    authorTextElement.innerHTML = 'Penulis: <span>' + authorText + '</span>'
 
     const yearTextElement = document.createElement("p");
     const yearText = document.getElementById('inputBookYear').value
-    yearTextElement.innerText = 'Tahun: ' + yearText
+    yearTextElement.innerHTML = 'Tahun: <span>' + yearText + '</span>'
 
     const selesaiDibacaStatus = document.getElementById('inputBookIsComplete').checked
     if(selesaiDibacaStatus === false) {
-        const book = simpanBuku(BELUM_DIBACA,judulBukuTextElement,authorTextElement,yearTextElement,selesaiDibacaStatus)
+        simpanBuku(BELUM_DIBACA,judulBukuTextElement,authorTextElement,yearTextElement,selesaiDibacaStatus)
     } else {
-        const book = simpanBuku(SUDAH_DIBACA,judulBukuText,authorText,yearText,selesaiDibacaStatus)
+        simpanBuku(SUDAH_DIBACA,judulBukuTextElement,authorTextElement,yearTextElement,selesaiDibacaStatus)
     }
-
     const bookObject = composeBooksObject(judulBukuText,authorText,yearText,selesaiDibacaStatus);
     books.push(bookObject);
-    updateDataToStorage();
 }
 
 function buatTombolBuangBuku() {
-    return createButton("red", "Sudah Dibaca", function (event) {
-        removeTaskFromCompleted(event.target.parentElement);
+    return createButton("red", "Belum Dibaca", function (event) {
+        buangBuku(event.target.parentElement);
     });
 }
 
-function buatTombolGantiStatusBuku() {
-    return createButton("green", "Belum Dibaca", function (event) {
-        sudahDibaca(event.target.parentElement);
-    });
+function buatTombolGantiStatusBuku(rak) {
+    if(rak == 'completeBookshelfList'){
+        return createButton("green", "Belum Dibaca", function (event) {
+            gantiStatus(event.target.parentElement.parentElement, false);
+        });
+    } else {
+        return createButton("green", "Sudah Dibaca", function (event) {
+            gantiStatus(event.target.parentElement.parentElement, true);
+        });
+    }
 }
 
 function createButton(buttonTypeClass, text , eventListener) {
@@ -74,20 +83,39 @@ function createButton(buttonTypeClass, text , eventListener) {
     return button;
 }
 
-function sudahDibaca(bookElement) {
-    const listSudahDibaca = document.getElementById(SUDAH_DIBACA);
-    const judulBuku = bookElement.querySelector(".inner > h2").innerText;
-    const authorBuku = bookElement.querySelector(".inner > p:nth-child(2)").innerText;
-    const yearBuku = bookElement.querySelector(".inner > p:nth-child(3)").innerText;
+function buangBuku(bookElement) {
+    const posisiBuku = findBukuIndex(taskElement[TODO_ITEMID]);
+    books.splice(posisiBuku, 1);
 
-    const newBook = simpanBuku(listSudahDibaca,judulBuku, authorBuku, yearBuku, true);
-     
-    const book = findbook(bookElement[BUKU_ITEMID]);
-    book.isComplete = true;
-    newBook[BUKU_ITEMID] = book.id;
-
-    listSudahDibaca.append(newBook);
     bookElement.remove();
-
     updateDataToStorage();
+}
+
+function gantiStatus(bookElement, status) {
+
+    const judulBuku = bookElement.querySelector('.book_item > h3')
+    const authorBuku = bookElement.querySelector('.book_item > p:nth-child(2)')
+    const yearBuku = bookElement.querySelector('.book_item > p:nth-child(3)')
+    console.log(judulBuku)
+    if(status === true) {
+        const listSudahDibaca = document.getElementById(SUDAH_DIBACA);
+        const newBook = simpanBuku(SUDAH_DIBACA,judulBuku, authorBuku, yearBuku, true);
+    
+        const book = findBook(bookElement[BUKU_ITEMID]);
+        book.isComplete = true;
+        newBook[BUKU_ITEMID] = book.id;
+        listSudahDibaca.append(newBook);
+        bookElement.remove();
+        updateDataToStorage();
+    } else {
+        const listBelumDibaca = document.getElementById(BELUM_DIBACA);
+        const newBook = simpanBuku(BELUM_DIBACA,judulBuku, authorBuku, yearBuku, false);
+    
+        const book = findBook(bookElement[BUKU_ITEMID]);
+        book.isComplete = false;
+        newBook[BUKU_ITEMID] = book.id;
+        listBelumDibaca.append(newBook);
+        bookElement.remove();
+        updateDataToStorage();
+    }
 }
