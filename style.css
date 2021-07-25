@@ -27,6 +27,7 @@ main {
     margin: 0 auto;
     padding: 16px;
     display: flex;
+    flex-direction: row;
     flex-wrap: nowrap;
     position: relative;
 }
@@ -197,4 +198,20 @@ main {
 .book_shelf > .book_list > .book_item > .action > .red {
     background-color: darkred;
     color: white;
+}
+
+@media (max-width: 670px) {
+
+    main {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .left-side {
+        width: 100%;
+    }
+
+    #formbuku {
+        padding: 2em;
+    }
 }
