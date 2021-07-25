@@ -123,11 +123,16 @@ function createButton(buttonTypeClass, text , eventListener) {
 }
 
 function buangBuku(bookElement) {
-    const posisiBuku = findBukuIndex(bookElement[BUKU_ITEMID]);
-    books.splice(posisiBuku, 1);
+    if (confirm("Yakin ingin menghapus buku ini?")) {
+        const posisiBuku = findBukuIndex(bookElement[BUKU_ITEMID]);
+        books.splice(posisiBuku, 1);
 
-    bookElement.parentElement.remove();
-    updateDataToStorage();
+        bookElement.parentElement.remove();
+        updateDataToStorage();
+        return
+    }
+    
+    return
 }
 
 function gantiStatus(bookElement, status) {
