@@ -10,4 +10,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
     document.getElementById('addBuku').onclick = showformaddbuku
     document.getElementById('gobackbtn').onclick = closeformaddbuku
+
+    if(isStorageExist()){
+        loadDataFromStorage();
+    }
+});
+
+document.addEventListener("ondatasaved", () => {
+    console.log("Data berhasil di simpan.");
+});
+
+document.addEventListener("ondataloaded", () => {
+    console.log('test')
+    refreshDataFromLocalstorage()
 });
