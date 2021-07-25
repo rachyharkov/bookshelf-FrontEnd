@@ -64,7 +64,7 @@ function findBook(idBuku) {
 
     for(book of books){
         if(book.id === idBuku)
-            //aneh, butuh console log selain pakai return
+            //aneh, butuh console log harusnya pakai return
             console.log(book)
             return book;
             

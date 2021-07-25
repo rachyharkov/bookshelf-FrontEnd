@@ -52,6 +52,7 @@ function masukanBuku() {
     }
     const bookObject = composeBooksObject(judulBukuText,authorText,yearText,selesaiDibacaStatus);
     books.push(bookObject);
+    updateDataToStorage();
 }
 
 function buatTombolBuangBuku() {
@@ -84,10 +85,10 @@ function createButton(buttonTypeClass, text , eventListener) {
 }
 
 function buangBuku(bookElement) {
-    const posisiBuku = findBukuIndex(taskElement[TODO_ITEMID]);
+    const posisiBuku = findBukuIndex(bookElement[BUKU_ITEMID]);
     books.splice(posisiBuku, 1);
 
-    bookElement.remove();
+    bookElement.parentElement.remove();
     updateDataToStorage();
 }
 
