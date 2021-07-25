@@ -67,7 +67,6 @@ function tampilkanBukudariStorage(a, b, c, d) {
     const selesaiDibacaStatus = d
 
     if(selesaiDibacaStatus) {
-    
         const textContainerElement = document.createElement("article");
         textContainerElement.classList.add('book_item')
         
@@ -79,7 +78,6 @@ function tampilkanBukudariStorage(a, b, c, d) {
 
         return textContainerElement
     } else {
-    
         const textContainerElement = document.createElement("article");
         textContainerElement.classList.add('book_item')
         
@@ -108,7 +106,6 @@ function buatTombolGantiStatusBuku(rak) {
     return createButton("green", "Belum Dibaca", function (event) {
         gantiStatus(event.target.parentElement.parentElement, false);
     });
-
 }
 
 function createButton(buttonTypeClass, text , eventListener) {
@@ -131,7 +128,6 @@ function buangBuku(bookElement) {
         updateDataToStorage();
         return
     }
-    
     return
 }
 
