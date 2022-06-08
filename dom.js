@@ -187,7 +187,7 @@ function editingBuku(bookElement) {
 
 function buatTombolBuangBuku() {
     return createButton("red", "Hapus Buku", function (event) {
-        buangBuku(event.target.parentElement);
+        buangBuku(event.target.parentElement.parentElement);
     });
 }
 
@@ -222,10 +222,10 @@ function createButton(buttonTypeClass, text , eventListener) {
 
 function buangBuku(bookElement) {
     if (confirm("Yakin ingin menghapus buku ini?")) {
-        const posisiBuku = findBukuIndex(bookElement[BUKU_ITEMID]);
+        const posisiBuku = findBukuIndex(bookElement.id);
         books.splice(posisiBuku, 1);
 
-        bookElement.parentElement.remove();
+        bookElement.remove();
         updateDataToStorage();
         refreshDataFromLocalstorage()
         return

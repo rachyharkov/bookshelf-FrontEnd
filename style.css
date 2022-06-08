@@ -262,9 +262,15 @@ main {
 
 .book_shelf > .book_list > .book_item {
     padding: 8px 16px 16px 16px;
-    box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+    box-shadow: rgb(0 0 0 / 8%) 0px 10px 36px 0px, rgb(0 0 0 / 6%) 0px 0px 0px 1px;
+    transition: all 250ms ease-in-out;
     border-radius: 5px;
     margin: 10px 0;
+}
+
+.book_shelf > .book_list > .book_item:hover {
+    transition: all 250ms ease-in-out;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
 }
 
 .book_shelf > .book_list > .book_item > h3, p {
