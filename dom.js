@@ -30,6 +30,10 @@ function simpanBuku(a, b, c, d) {
     return textContainerElement
 }
 
+function cleanSearchTextbox() {
+    document.getElementById('searchBookTitle').value = '';
+}
+
 function refreshDataFromLocalstorage() {
 
     const bookshelfSelect = document.getElementById('bookshelf-selection').value
@@ -61,10 +65,7 @@ function refreshDataFromLocalstorage() {
                 <b>Oops!</b> Tidak ada buku yang ${statusbacanya}
             </p>
         </div>`;
-    }
-
-    document.getElementById('searchBookTitle').value = '';
-    
+    }  
 }
 
 function masukanBuku() {
@@ -77,9 +78,8 @@ function masukanBuku() {
     const selesaiDibacaStatus = document.getElementById('inputBookIsComplete').checked
     
     
-    const bookObject = composeBooksObject(judulBukuText,authorText,yearText,selesaiDibacaStatus);
-    books.push(bookObject);
-    updateDataToStorage();
+    addBook(judulBukuText, authorText, yearText, selesaiDibacaStatus);
+    
     refreshDataFromLocalstorage();
 
     judulBukuText.value = '';
@@ -167,6 +167,7 @@ function editingBuku(bookElement) {
     tombolSimpanBuku.innerHTML = 'Simpan'
     tombolSimpanBuku.addEventListener('click', function() {
         updatebook(bookElement.id, inputJudulBuku.value, inputAuthor.value, inputYear.value)
+        alert('Buku berhasil diperbarui')
         refreshDataFromLocalstorage()
 
     })

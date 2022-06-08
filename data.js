@@ -47,6 +47,12 @@ function updatebook(bookId, judulBuku, authorBuku, yearBuku) {
     }
 }
 
+function addBook(judulBuku, authorBuku, yearBuku, telahDibaca) {
+    const bookObject = composeBooksObject(judulBuku, authorBuku, yearBuku, telahDibaca);
+    books.push(bookObject);
+    updateDataToStorage();
+}
+
 function composeBooksObject(judulBuku, authorBuku, yearBuku, telahDibaca) {
     return {
         id: +new Date(),

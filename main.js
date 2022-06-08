@@ -13,7 +13,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // kustom aja
     // detect bookshelf-selection changed value
-    document.getElementById('bookshelf-selection').onchange = refreshDataFromLocalstorage
+    document.getElementById('bookshelf-selection').onchange = (() => {
+        refreshDataFromLocalstorage();
+
+        cleanSearchTextbox();
+    })
 
     document.getElementById('searchBookTitle').oninput = cariBuku
 
