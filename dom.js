@@ -83,11 +83,11 @@ function masukanBuku() {
     const selesaiDibacaStatus = document.getElementById('inputBookIsComplete').checked
 
     
-    refreshDataFromLocalstorage();
-
+    
     const bookObject = composeBooksObject(judulBukuText,authorText,yearText,selesaiDibacaStatus);
     books.push(bookObject);
     updateDataToStorage();
+    refreshDataFromLocalstorage();
 
     judulBukuText.value = '';
     authorText.value = '';
@@ -167,6 +167,7 @@ function buangBuku(bookElement) {
 
         bookElement.parentElement.remove();
         updateDataToStorage();
+        refreshDataFromLocalstorage()
         return
     }
     return
