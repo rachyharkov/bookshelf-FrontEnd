@@ -30,11 +30,10 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 document.addEventListener("ondatasaved", () => {
-    console.log("Data berhasil di simpan.");
+    console.log("data saved")
 });
 
 document.addEventListener("ondataloaded", () => {
-    console.log('test')
     refreshDataFromLocalstorage()
 });
 

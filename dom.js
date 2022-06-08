@@ -23,7 +23,7 @@ function simpanBuku(a, b, c, d) {
     textContainerElement.append(a,b,c, actionBookElement);
     rakBuku.append(textContainerElement)
 
-    const bookObject = composeBooksObject(a.innerText,b.innerText,c.innerText,d.innerText);
+    const bookObject = composeObjectBuku(a.innerText,b.innerText,c.innerText,d.innerText);
     textContainerElement[BUKU_ITEMID] = bookObject.id;
     updateDataToStorage();
 
@@ -78,7 +78,7 @@ function masukanBuku() {
     const selesaiDibacaStatus = document.getElementById('inputBookIsComplete').checked
     
     
-    addBook(judulBukuText, authorText, yearText, selesaiDibacaStatus);
+    tambahBukuAction(judulBukuText, authorText, yearText, selesaiDibacaStatus);
     
     refreshDataFromLocalstorage();
 
@@ -166,7 +166,7 @@ function editingBuku(bookElement) {
     tombolSimpanBuku.classList.add('editing-state')
     tombolSimpanBuku.innerHTML = 'Simpan'
     tombolSimpanBuku.addEventListener('click', function() {
-        updatebook(bookElement.id, inputJudulBuku.value, inputAuthor.value, inputYear.value)
+        updateBukuAction(bookElement.id, inputJudulBuku.value, inputAuthor.value, inputYear.value)
         alert('Buku berhasil diperbarui')
         refreshDataFromLocalstorage()
 
@@ -242,14 +242,14 @@ function gantiStatus(bookElement, status) {
     if(status) {
 
         const newBook = simpanBuku(SUDAH_DIBACA,judulBuku, authorBuku, yearBuku, false);
-        const book = findBook(Number(bookElement[BUKU_ITEMID]));
+        const book = findBuku(Number(bookElement[BUKU_ITEMID]));
         book.telahDibaca = true;
         newBook[BUKU_ITEMID] = book.id;
         bookElement.remove();
         updateDataToStorage();
     } else {
         const newBook = simpanBuku(BELUM_DIBACA,judulBuku, authorBuku, yearBuku, true);
-        const book = findBook(Number(bookElement[BUKU_ITEMID]));
+        const book = findBuku(Number(bookElement[BUKU_ITEMID]));
         book.telahDibaca = false;
         newBook[BUKU_ITEMID] = book.id;
         bookElement.remove();
