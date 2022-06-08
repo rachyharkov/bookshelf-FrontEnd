@@ -34,8 +34,6 @@ function refreshDataFromLocalstorage() {
 
     const bookshelfSelect = document.getElementById('bookshelf-selection').value
 
-    console.log(bookshelfSelect)
-
     const listWrapper = document.getElementById('bookshelfList');
 
     listWrapper.innerHTML = '';
@@ -64,24 +62,19 @@ function refreshDataFromLocalstorage() {
             </p>
         </div>`;
     }
+
+    document.getElementById('searchBookTitle').value = '';
     
 }
 
 function masukanBuku() {
-    const judulBukuTextElement = document.createElement("h3");
-    const judulBukuText = document.getElementById('inputBookTitle').value   
-    judulBukuTextElement.innerHTML = judulBukuText;
+    const judulBukuText = document.getElementById('inputBookTitle').value
  
-    const authorTextElement = document.createElement("p");
     const authorText = document.getElementById('inputBookAuthor').value
-    authorTextElement.innerHTML = 'Penulis: <span>' + authorText + '</span>'
 
-    const yearTextElement = document.createElement("p");
     const yearText = document.getElementById('inputBookYear').value
-    yearTextElement.innerHTML = 'Tahun: <span>' + yearText + '</span>'
 
     const selesaiDibacaStatus = document.getElementById('inputBookIsComplete').checked
-
     
     
     const bookObject = composeBooksObject(judulBukuText,authorText,yearText,selesaiDibacaStatus);
@@ -97,13 +90,14 @@ function masukanBuku() {
 
 function tampilkanBukudariStorage(a, b, c, d) {
     const judulBukuTextElement = document.createElement("h3");
+    judulBukuTextElement.classList.add('editing-state')
     judulBukuTextElement.innerHTML = a;
  
     const authorTextElement = document.createElement("p");
-    authorTextElement.innerHTML = 'Penulis: <span>' + b + '</span>'
+    authorTextElement.innerHTML = 'Penulis: <span class="editing-state">' + b + '</span>'
 
     const yearTextElement = document.createElement("p");
-    yearTextElement.innerHTML = 'Tahun: <span>' + c + '</span>'
+    yearTextElement.innerHTML = 'Tahun: <span class="editing-state">' + c + '</span>'
 
     const selesaiDibacaStatus = d
 
@@ -113,7 +107,7 @@ function tampilkanBukudariStorage(a, b, c, d) {
         
         const actionBookElement = document.createElement("div");
         actionBookElement.classList.add('action')
-        actionBookElement.append(buatTombolGantiStatusBuku(false),buatTombolBuangBuku())
+        actionBookElement.append(buatTombolGantiStatusBuku(false),buatTombolEditBuku(),buatTombolBuangBuku())
 
         textContainerElement.append(judulBukuTextElement, authorTextElement, yearTextElement, actionBookElement);
 
@@ -124,16 +118,81 @@ function tampilkanBukudariStorage(a, b, c, d) {
         
         const actionBookElement = document.createElement("div");
         actionBookElement.classList.add('action')
-        actionBookElement.append(buatTombolGantiStatusBuku(true),buatTombolBuangBuku())
+        actionBookElement.append(buatTombolGantiStatusBuku(true),buatTombolEditBuku(),buatTombolBuangBuku())
 
         textContainerElement.append(judulBukuTextElement, authorTextElement, yearTextElement, actionBookElement);
         return textContainerElement
     }
 }
 
+function editingBuku(bookElement) {
+    
+    // replace element of bookElement childnodes[0] with input
+    const judulBukuTextElement = bookElement.childNodes[0];
+    const authorTextElement = bookElement.childNodes[1].childNodes[1];
+    const yearTextElement = bookElement.childNodes[2].childNodes[1];
+
+    const actionBookElement = bookElement.childNodes[3];
+
+    const judulBukuText = judulBukuTextElement.innerText
+    const authorText = authorTextElement.innerText
+    const yearText = yearTextElement.innerText
+    
+    const inputJudulBuku = document.createElement("input");
+    inputJudulBuku.classList.add('editing-state')
+    inputJudulBuku.setAttribute('type', 'text')
+    inputJudulBuku.setAttribute('placeholder', 'Judul Buku')
+    inputJudulBuku.value = judulBukuText
+    
+    const inputAuthor = document.createElement("input");
+    inputAuthor.classList.add('editing-state')
+    inputAuthor.setAttribute('type', 'text')
+    inputAuthor.setAttribute('placeholder', 'Penulis')
+    inputAuthor.value = authorText
+    
+    const inputYear = document.createElement("input");
+    inputYear.classList.add('editing-state')
+    inputYear.setAttribute('type', 'text')
+    inputYear.setAttribute('placeholder', 'Tahun')
+    inputYear.value = yearText
+    
+    // replace element 
+    judulBukuTextElement.replaceWith(inputJudulBuku);
+    authorTextElement.replaceWith(inputAuthor);
+    yearTextElement.replaceWith(inputYear);
+    
+    // replace element of bookElement childnodes[3] with button
+    const tombolSimpanBuku = document.createElement("button");
+    tombolSimpanBuku.classList.add('editing-state')
+    tombolSimpanBuku.innerHTML = 'Simpan'
+    tombolSimpanBuku.addEventListener('click', function() {
+        updatebook(bookElement.id, inputJudulBuku.value, inputAuthor.value, inputYear.value)
+        refreshDataFromLocalstorage()
+
+    })
+
+    const tombolBatalEdit = document.createElement("button");
+    tombolBatalEdit.classList.add('editing-state', 'red')
+    tombolBatalEdit.innerHTML = 'Batal'
+    tombolBatalEdit.addEventListener('click', function() {
+        refreshDataFromLocalstorage()
+    })
+
+    // delete content inside actionBookElement
+    actionBookElement.innerHTML = '';
+    actionBookElement.append(tombolSimpanBuku);
+    actionBookElement.append(tombolBatalEdit);
+}
+
 function buatTombolBuangBuku() {
     return createButton("red", "Hapus Buku", function (event) {
         buangBuku(event.target.parentElement);
+    });
+}
+
+function buatTombolEditBuku() {
+    return createButton("green", "Edit", function (event) {        
+        editingBuku(event.target.parentElement.parentElement);
     });
 }
 
@@ -183,7 +242,6 @@ function gantiStatus(bookElement, status) {
 
         const newBook = simpanBuku(SUDAH_DIBACA,judulBuku, authorBuku, yearBuku, false);
         const book = findBook(Number(bookElement[BUKU_ITEMID]));
-        console.log(book)
         book.telahDibaca = true;
         newBook[BUKU_ITEMID] = book.id;
         bookElement.remove();

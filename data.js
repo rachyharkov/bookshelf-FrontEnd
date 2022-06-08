@@ -30,6 +30,23 @@ function updateDataToStorage() {
         saveData();
 }
 
+function updatebook(bookId, judulBuku, authorBuku, yearBuku) {
+    let index = findBukuIndex(bookId);
+    if(index >= 0){
+
+        console.log(books[index])
+
+        // update data
+        books[index].judulBuku = judulBuku;
+        books[index].authorBuku = authorBuku;
+        books[index].yearBuku = yearBuku;
+
+        console.log(books[index])
+
+        updateDataToStorage()
+    }
+}
+
 function composeBooksObject(judulBuku, authorBuku, yearBuku, telahDibaca) {
     return {
         id: +new Date(),
@@ -51,7 +68,7 @@ function findBook(idBuku) {
 function findBukuIndex(bookId) {
     let index = 0
     for (book of books) {
-        if(book.id === bookId)
+        if(book.id == bookId)
             return index;
 
         index++;

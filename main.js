@@ -17,6 +17,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     document.getElementById('searchBookTitle').oninput = cariBuku
 
+    
+
     if(isStorageExist()){
         loadDataFromStorage();
     }
