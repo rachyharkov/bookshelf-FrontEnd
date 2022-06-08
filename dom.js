@@ -2,25 +2,25 @@ const BELUM_DIBACA = "incompleteBookshelfList";
 const SUDAH_DIBACA = "completeBookshelfList";
 const BUKU_ITEMID = "id";
 
-function showformaddbuku() {
+function tampilkanFormBuku() {
     document.getElementById('formbuku').classList.add('tampil')
 }
 
-function closeformaddbuku() {
+function tutupFormBuku() {
     document.getElementById('formbuku').classList.remove('tampil')
 }
 
-function simpanBuku(dimana, a, b, c, d) {
-    const rakBuku = document.getElementById(dimana)
+function simpanBuku(a, b, c, d) {
+    const rakBuku = document.getElementById('bookshelfList')
     
     const textContainerElement = document.createElement("article");
     textContainerElement.classList.add('book_item')
     
-    const bookOperationElement = document.createElement("div");
-    bookOperationElement.classList.add('action')
-    bookOperationElement.append(buatTombolGantiStatusBuku(d),buatTombolBuangBuku())
+    const actionBookElement = document.createElement("div");
+    actionBookElement.classList.add('action')
+    actionBookElement.append(buatTombolGantiStatusBuku(d),buatTombolBuangBuku())
 
-    textContainerElement.append(a,b,c, bookOperationElement);
+    textContainerElement.append(a,b,c, actionBookElement);
     rakBuku.append(textContainerElement)
 
     const bookObject = composeBooksObject(a.innerText,b.innerText,c.innerText,d.innerText);
@@ -28,6 +28,43 @@ function simpanBuku(dimana, a, b, c, d) {
     updateDataToStorage();
 
     return textContainerElement
+}
+
+function refreshDataFromLocalstorage() {
+
+    const bookshelfSelect = document.getElementById('bookshelf-selection').value
+
+    console.log(bookshelfSelect)
+
+    const listWrapper = document.getElementById('bookshelfList');
+
+    listWrapper.innerHTML = '';
+
+    let count = 0;
+
+    
+    for(book of books){
+
+        const statusbaca = book.telahDibaca ? SUDAH_DIBACA : BELUM_DIBACA;
+        
+        if(statusbaca == bookshelfSelect) {
+            const newBook = tampilkanBukudariStorage(book.judulBuku, book.authorBuku, book.yearBuku, book.telahDibaca);
+            newBook[BUKU_ITEMID] = book.id;
+            listWrapper.append(newBook);
+            count++;
+        }
+    }
+
+    const statusbacanya = bookshelfSelect == SUDAH_DIBACA ? "Sudah Dibaca disini, mulai tandakan buku yang belum anda baca sebagai 'Sudah Dibaca' atau tambah baru." : "Belum Dibaca, mulai tambahkan buku pada tombol 'tambah'.";
+
+    if(count <= 0) {
+        listWrapper.innerHTML = `<div class="alert bg-red">
+            <p style="color: white; font-size: 11px;">
+                <b>Oops!</b> Tidak ada buku yang ${statusbacanya}
+            </p>
+        </div>`;
+    }
+    
 }
 
 function masukanBuku() {
@@ -44,14 +81,18 @@ function masukanBuku() {
     yearTextElement.innerHTML = 'Tahun: <span>' + yearText + '</span>'
 
     const selesaiDibacaStatus = document.getElementById('inputBookIsComplete').checked
-    if(selesaiDibacaStatus) {
-        simpanBuku(SUDAH_DIBACA,judulBukuTextElement,authorTextElement,yearTextElement,!selesaiDibacaStatus)
-    } else {
-        simpanBuku(BELUM_DIBACA,judulBukuTextElement,authorTextElement,yearTextElement,!selesaiDibacaStatus)
-    }
+
+    
+    refreshDataFromLocalstorage();
+
     const bookObject = composeBooksObject(judulBukuText,authorText,yearText,selesaiDibacaStatus);
     books.push(bookObject);
     updateDataToStorage();
+
+    judulBukuText.value = '';
+    authorText.value = '';
+    yearText.value = '';
+    document.getElementById('inputBookIsComplete').checked = false;
 }
 
 function tampilkanBukudariStorage(a, b, c, d) {
@@ -70,22 +111,22 @@ function tampilkanBukudariStorage(a, b, c, d) {
         const textContainerElement = document.createElement("article");
         textContainerElement.classList.add('book_item')
         
-        const bookOperationElement = document.createElement("div");
-        bookOperationElement.classList.add('action')
-        bookOperationElement.append(buatTombolGantiStatusBuku(false),buatTombolBuangBuku())
+        const actionBookElement = document.createElement("div");
+        actionBookElement.classList.add('action')
+        actionBookElement.append(buatTombolGantiStatusBuku(false),buatTombolBuangBuku())
 
-        textContainerElement.append(judulBukuTextElement, authorTextElement, yearTextElement, bookOperationElement);
+        textContainerElement.append(judulBukuTextElement, authorTextElement, yearTextElement, actionBookElement);
 
         return textContainerElement
     } else {
         const textContainerElement = document.createElement("article");
         textContainerElement.classList.add('book_item')
         
-        const bookOperationElement = document.createElement("div");
-        bookOperationElement.classList.add('action')
-        bookOperationElement.append(buatTombolGantiStatusBuku(true),buatTombolBuangBuku())
+        const actionBookElement = document.createElement("div");
+        actionBookElement.classList.add('action')
+        actionBookElement.append(buatTombolGantiStatusBuku(true),buatTombolBuangBuku())
 
-        textContainerElement.append(judulBukuTextElement, authorTextElement, yearTextElement, bookOperationElement);
+        textContainerElement.append(judulBukuTextElement, authorTextElement, yearTextElement, actionBookElement);
         return textContainerElement
     }
 }
@@ -158,22 +199,5 @@ function gantiStatus(bookElement, status) {
         listBelumDibaca.append(newBook);
         bookElement.remove();
         updateDataToStorage();
-    }
-}
-
-function refreshDataFromLocalstorage() {
-    const listUncompleted = document.getElementById(BELUM_DIBACA);
-    let listCompleted = document.getElementById(SUDAH_DIBACA);
-
-    for(book of books){
-        if(book.telahDibaca){
-            const newBook = tampilkanBukudariStorage(book.judulBuku, book.authorBuku, book.yearBuku, book.telahDibaca);
-            newBook[BUKU_ITEMID] = book.id;
-            listCompleted.append(newBook);
-        } else {
-            const newBook = tampilkanBukudariStorage(book.judulBuku, book.authorBuku, book.yearBuku, book.telahDibaca);
-            newBook[BUKU_ITEMID] = book.id;
-            listUncompleted.append(newBook);
-        }
     }
 }

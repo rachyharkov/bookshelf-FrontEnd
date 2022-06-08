@@ -14,31 +14,41 @@
 <header class="head_bar">
     <h1 class="head_bar__title">Bookshelf Apps</h1>
 </header>
+
 <main>
-    <div class="left-side">
-        <section class="input_section">
-            <button id="addBuku">Tambah Buku</button>
-        </section>
-        <section class="search_section">
-            <form id="searchBook">
-                <input id="searchBookTitle" type="text" placeholder="Cari Buku">
-            </form>
-        </section>
+    <div class="main-inner">
+        <div class="wrapper-content">
+            <div class="bookshelf-header">
+                <div class="bookshelf-actions-wrapper">
+                    <div class="choose-bookshelf-wrapper">
+                        <select id="bookshelf-selection">
+                            <option value="completeBookshelfList">Selesai Dibaca</option>
+                            <option value="incompleteBookshelfList">Belum Dibaca</option>
+                        </select>
+                    </div>
+                    <form id="searchBook" style="text-align: center;">
+                        <div class="searchbox">
+                            <input id="searchBookTitle" type="text" placeholder="Cari Buku">
+                            <button class="btn-search">	&#x1F50E;&#xFE0E;</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="bookshelf-add-action-wrapper">
+                    <button class="btn btn-normal" id="addBuku" style="margin-top: 5px;">Tambah</button>
+                </div>
+            </div>
+            <section class="book_shelf">
+                <div id="bookshelfList" class="book_list">
+                    
+                </div>
+            </section>    
+            <!-- <section class="book_shelf">
+                <h2>Selesai dibaca</h2>
+                <div id="completeBookshelfList" class="book_list">
+                </div>
+            </section> -->
+        </div>            
     </div>
-    <div class="right-side">
-        <section class="book_shelf">
-            <h2>Belum selesai dibaca</h2>
-            <div id="incompleteBookshelfList" class="book_list">
-            </div>
-        </section>
-    
-        <section class="book_shelf">
-            <h2>Selesai dibaca</h2>
-    
-            <div id="completeBookshelfList" class="book_list">
-            </div>
-        </section>
-    </div>            
 </main>
 <div id="formbuku" class="input_section">
     <h2>Masukkan Buku Baru</h2>
@@ -56,8 +66,8 @@
             <input id="inputBookYear" type="number" required>
         </div>
         <div class="input_inline">
-            <label for="inputBookIsComplete">Selesai dibaca</label>
             <input id="inputBookIsComplete" type="checkbox">
+            <label for="inputBookIsComplete">Selesai dibaca</label>
         </div>
         <button id="bookSubmit" type="submit">Simpan</button>
         <button id="gobackbtn" type="button">Kembali</button>
