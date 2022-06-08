@@ -5,15 +5,20 @@ document.addEventListener("DOMContentLoaded", function () {
     submitForm.addEventListener("submit", function (event) {
         event.preventDefault();
         masukanBuku();
-        closeformaddbuku()
+        tutupFormBuku()
     });
 
-    document.getElementById('addBuku').onclick = showformaddbuku
-    document.getElementById('gobackbtn').onclick = closeformaddbuku
+    document.getElementById('addBuku').onclick = tampilkanFormBuku
+    document.getElementById('gobackbtn').onclick = tutupFormBuku
+
+    // kustom aja
+    // detect bookshelf-selection changed value
+    document.getElementById('bookshelf-selection').onchange = refreshDataFromLocalstorage
 
     if(isStorageExist()){
         loadDataFromStorage();
     }
+
 });
 
 document.addEventListener("ondatasaved", () => {
@@ -24,3 +29,5 @@ document.addEventListener("ondataloaded", () => {
     console.log('test')
     refreshDataFromLocalstorage()
 });
+
+

@@ -12,43 +12,125 @@ input, button {
     font-size: 16px;
 }
 
+.searchbox {
+    display: inline-flex;
+    flex-direction: row;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 5px;
+}
+
+.searchbox > button {
+    border: none;
+    background-color: none;
+    padding: 0.3rem 0.5rem;
+    font-size: 11px;
+    background-color: #466bcf;
+    color: white;
+}
+
+.searchbox > input {
+    border: none;
+    padding: 5px 1.2rem;
+}
+
 .head_bar {
     padding: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: cornflowerblue;
+    background-color: #466bcf;
     color: white;
 }
 
+.btn {
+    border: none;
+    background-color: none;
+    border-radius: 3px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+    padding: 0.3rem 0.5rem;
+    font-size: 11px;
+}
+
+.btn-normal {
+    background-color: #6495ed !important;
+    color: #fff;
+}
 main {
-    max-width: 800px;
-    width: 80%;
+    width: 100%;
+    margin: 0;
+    background-color: #e8e8e8;
+}
+
+.main-inner {
+    max-width: 607px;
     margin: 0 auto;
     padding: 16px;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
     position: relative;
 }
 
-.left-side {
-    width: 30%;
+.wrapper-content {
+    height: 100vh;
 }
 
-.right-side {
+.navigation {
+    position: fixed;
+    top: 0;
+}
+
+.bookshelf-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.bookshelf-actions-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.alert {
     width: 100%;
+    border-radius: 10px;
+    padding: 1.2rem 1rem;
+    margin: 0;
+}
+
+.bg-red {
+    background-color: #ca4a4a;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+}
+
+.choose-bookshelf-wrapper {
+    margin-right: 10px;
+}
+
+.choose-bookshelf-wrapper select {
+    border: none;
+    background-color: #6495ed !important;
+    color: #fff;
+    padding: 0.3rem 0.5rem;
+    height: 2rem;
+    width: 8.7rem;
+    line-height: 2;
+    font-size: 11px;
+    border-radius: 5px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+}
+
+.choose-bookshelf-wrapper select option {
+    padding: 30px;
 }
 
 #formbuku {
     position: fixed;
     width: 100%;
-    top: 0;
     padding: 22vh;
     background: #2f2f2fc9;
     transition: all 250ms ease-in-out;
     transform: scale(0);
-    top: -100%;
+    top: 10vh;
 }
 
 .tampil {
@@ -98,6 +180,7 @@ main {
     display: block;
     width: 100%;
     padding: 8px;
+    margin: 5px 0px;
     cursor: pointer;
 }
 
@@ -115,7 +198,7 @@ main {
 
 
 .input_section > form > .input > label {
-    color: cornflowerblue;
+    color: white;
     font-weight: bold;
 }
 
@@ -126,9 +209,9 @@ main {
 }
 
 .input_section > form > .input_inline > label {
-    color: cornflowerblue;
+    color: white;
     font-weight: bold;
-    margin-right: 10px;
+    margin-left: 10px;
 }
 
 .search_section {
@@ -142,7 +225,7 @@ main {
 }
 
 .search_section > h2 {
-    color: cornflowerblue;
+    color: white;
 }
 
 .search_section > form {
@@ -158,9 +241,9 @@ main {
 
 .book_shelf {
     margin: 0px 10px 10px 10px;
-    border: 1px solid black;
     padding: 16px;
     border-radius: 10px;
+    min-height: 80vh;
 }
 
 .book_shelf > h2 {
@@ -173,7 +256,7 @@ main {
 
 .book_shelf > .book_list > .book_item {
     padding: 8px 16px 16px 16px;
-    border: 1px solid black;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
     border-radius: 5px;
     margin: 10px 0;
 }
@@ -204,10 +287,6 @@ main {
 
     main {
         flex-direction: column;
-        width: 100%;
-    }
-
-    .left-side {
         width: 100%;
     }
 
