@@ -15,6 +15,8 @@ document.addEventListener("DOMContentLoaded", function () {
     // detect bookshelf-selection changed value
     document.getElementById('bookshelf-selection').onchange = refreshDataFromLocalstorage
 
+    document.getElementById('searchBookTitle').oninput = cariBuku
+
     if(isStorageExist()){
         loadDataFromStorage();
     }

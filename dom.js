@@ -180,25 +180,60 @@ function gantiStatus(bookElement, status) {
     const yearBuku = bookElement.querySelector('.book_item > p:nth-child(3)')
 
     if(status) {
-        const listSudahDibaca = document.getElementById(SUDAH_DIBACA);
+
         const newBook = simpanBuku(SUDAH_DIBACA,judulBuku, authorBuku, yearBuku, false);
-    
         const book = findBook(Number(bookElement[BUKU_ITEMID]));
         console.log(book)
         book.telahDibaca = true;
         newBook[BUKU_ITEMID] = book.id;
-        listSudahDibaca.append(newBook);
         bookElement.remove();
         updateDataToStorage();
     } else {
-        const listBelumDibaca = document.getElementById(BELUM_DIBACA);
         const newBook = simpanBuku(BELUM_DIBACA,judulBuku, authorBuku, yearBuku, true);
-    
         const book = findBook(Number(bookElement[BUKU_ITEMID]));
         book.telahDibaca = false;
         newBook[BUKU_ITEMID] = book.id;
-        listBelumDibaca.append(newBook);
         bookElement.remove();
         updateDataToStorage();
     }
+
+    refreshDataFromLocalstorage();
+    
+}
+
+function cariBuku() {
+
+    const cariBuku = document.getElementById('searchBookTitle').value;
+    const listWrapper = document.getElementById('bookshelfList');
+    listWrapper.innerHTML = '';
+
+    if(cariBuku === '') {
+        refreshDataFromLocalstorage();
+        return
+    }
+
+    const bookshelfSelect = document.getElementById('bookshelf-selection').value
+
+    const hasilCari = books.filter(function (book) {
+
+        const statusbaca = book.telahDibaca ? SUDAH_DIBACA : BELUM_DIBACA;
+        
+        if(statusbaca === bookshelfSelect) {
+            return book.judulBuku.toLowerCase().includes(cariBuku.toLowerCase())
+        }
+    })
+
+
+    if(hasilCari.length === 0) {
+        const notFound = document.createElement("h3");
+        notFound.innerHTML = 'Tidak ditemukan buku dengan judul "' + cariBuku + '"'
+        listWrapper.append(notFound);
+        return
+    }
+
+    hasilCari.forEach(function (book) {
+        const bookElement = tampilkanBukudariStorage(book.judulBuku, book.authorBuku, book.yearBuku, book.telahDibaca);
+        bookElement[BUKU_ITEMID] = book.id;
+        listWrapper.append(bookElement);
+    })
 }

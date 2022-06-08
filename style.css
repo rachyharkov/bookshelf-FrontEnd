@@ -274,12 +274,12 @@ main {
 }
 
 .book_shelf > .book_list > .book_item > .action > .green {
-    background-color: darkgreen;
+    background-color:#4caf50;
     color: white;
 }
 
 .book_shelf > .book_list > .book_item > .action > .red {
-    background-color: darkred;
+    background-color: #f44336;
     color: white;
 }
 
