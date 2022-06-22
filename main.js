@@ -10,9 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     document.getElementById('addBuku').onclick = tampilkanFormBuku
     document.getElementById('gobackbtn').onclick = tutupFormBuku
-
-    // kustom aja
-    // detect bookshelf-selection changed value
+    
     document.getElementById('bookshelf-selection').onchange = (() => {
         refreshDataFromLocalstorage();
 

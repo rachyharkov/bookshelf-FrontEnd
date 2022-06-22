@@ -33,8 +33,6 @@ function updateDataToStorage() {
 function updateBukuAction(bookId, judulBuku, authorBuku, yearBuku) {
     let index = findBukuIndex(bookId);
     if(index >= 0){
-
-        // update data
         books[index].judulBuku = judulBuku;
         books[index].authorBuku = authorBuku;
         books[index].yearBuku = yearBuku;

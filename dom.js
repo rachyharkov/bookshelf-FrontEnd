@@ -69,22 +69,22 @@ function refreshDataFromLocalstorage() {
 }
 
 function masukanBuku() {
-    const judulBukuText = document.getElementById('inputBookTitle').value
+    let judulBukuText = document.getElementById('inputBookTitle').value
  
-    const authorText = document.getElementById('inputBookAuthor').value
+    let authorText = document.getElementById('inputBookAuthor').value
 
-    const yearText = document.getElementById('inputBookYear').value
+    let yearText = document.getElementById('inputBookYear').value
 
-    const selesaiDibacaStatus = document.getElementById('inputBookIsComplete').checked
+    let selesaiDibacaStatus = document.getElementById('inputBookIsComplete').checked
     
     
     tambahBukuAction(judulBukuText, authorText, yearText, selesaiDibacaStatus);
     
     refreshDataFromLocalstorage();
 
-    judulBukuText.value = '';
-    authorText.value = '';
-    yearText.value = '';
+    document.getElementById('inputBookTitle').value = '';
+    document.getElementById('inputBookAuthor').value = '';
+    document.getElementById('inputBookYear').value = '';
     document.getElementById('inputBookIsComplete').checked = false;
 }
 
@@ -127,7 +127,6 @@ function tampilkanBukudariStorage(a, b, c, d) {
 
 function editingBuku(bookElement) {
     
-    // replace element of bookElement childnodes[0] with input
     const judulBukuTextElement = bookElement.childNodes[0];
     const authorTextElement = bookElement.childNodes[1].childNodes[1];
     const yearTextElement = bookElement.childNodes[2].childNodes[1];
@@ -152,16 +151,14 @@ function editingBuku(bookElement) {
     
     const inputYear = document.createElement("input");
     inputYear.classList.add('editing-state')
-    inputYear.setAttribute('type', 'text')
+    inputYear.setAttribute('type', 'number')
     inputYear.setAttribute('placeholder', 'Tahun')
     inputYear.value = yearText
     
-    // replace element 
     judulBukuTextElement.replaceWith(inputJudulBuku);
     authorTextElement.replaceWith(inputAuthor);
     yearTextElement.replaceWith(inputYear);
     
-    // replace element of bookElement childnodes[3] with button
     const tombolSimpanBuku = document.createElement("button");
     tombolSimpanBuku.classList.add('editing-state')
     tombolSimpanBuku.innerHTML = 'Simpan'
@@ -179,7 +176,6 @@ function editingBuku(bookElement) {
         refreshDataFromLocalstorage()
     })
 
-    // delete content inside actionBookElement
     actionBookElement.innerHTML = '';
     actionBookElement.append(tombolSimpanBuku);
     actionBookElement.append(tombolBatalEdit);
